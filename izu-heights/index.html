@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>伊豆ハイツゴルフ倶楽部 - ゴルフノート</title>
+<style>
+/* ==========================================================================
+   ゴルフノート ビューア用スタイルシート
+   ========================================================================== */
+
+:root {
+  --primary-color: #1a5632;
+  --accent-color: #2e8b57;
+  --light-green: #f0f7f2;
+  --bg-color: #f5f6f0;
+  --text-color: #333;
+  --border-color: #d4ddd6;
+  --birdie-color: #e8156d;
+  --birdie-bg: #fdf0f5;
+  --par-color: #2e8b57;
+  --bogey-color: #d4a017;
+  --bogey-bg: #fdf8e8;
+  --double-bogey-color: #c0392b;
+  --double-bogey-bg: #fdf0f0;
+  --good-mark: #2e8b57;
+  --bad-mark: #c0392b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  line-height: 1.7;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  margin: 0;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 50px 60px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+}
+
+header {
+  border-bottom: 3px solid var(--primary-color);
+  margin-bottom: 35px;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+h1 {
+  font-size: 26px;
+  color: var(--primary-color);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.meta {
+  font-size: 14px;
+  color: #888;
+  white-space: nowrap;
+}
+
+h2 {
+  font-size: 18px;
+  border-left: 5px solid var(--primary-color);
+  padding: 4px 0 4px 14px;
+  margin-top: 45px;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  background-color: var(--light-green);
+  border-radius: 0 4px 4px 0;
+}
+
+.course-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.course-detail .item {
+  background: var(--light-green);
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.course-detail .item .label {
+  font-size: 11px;
+  color: #888;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.course-detail .item .value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.course-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.9;
+  margin: 15px 0;
+  padding: 14px 18px;
+  background: #fafbfa;
+  border-radius: 6px;
+  border-left: 3px solid var(--accent-color);
+}
+
+.course-links {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.course-links a {
+  color: var(--accent-color);
+  text-decoration: none;
+  margin-right: 16px;
+}
+
+.course-links a:hover {
+  text-decoration: underline;
+}
+
+/* スコアカード（コース情報用） */
+.scorecard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: center;
+  margin: 15px 0 8px 0;
+}
+
+.scorecard-table th,
+.scorecard-table td {
+  border: 1px solid var(--border-color);
+  padding: 6px 2px;
+}
+
+.scorecard-table thead th {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+.scorecard-table .row-label {
+  background: #f8faf8;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: left;
+  padding-left: 8px;
+  white-space: nowrap;
+}
+
+.scorecard-table .total-col {
+  background: var(--light-green);
+  font-weight: 700;
+}
+
+.scorecard-table .par-row td {
+  font-weight: 600;
+}
+
+.scorecard-table .hdcp-row td {
+  font-size: 11px;
+  color: #999;
+}
+
+/* サマリーカード */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.summary-card {
+  background: #fff;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.summary-card .number {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary-color);
+  line-height: 1.1;
+}
+
+.summary-card .unit {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.summary-card.highlight {
+  border-color: var(--primary-color);
+  background: var(--light-green);
+}
+
+/* 履歴テーブル */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.history-table th,
+.history-table td {
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.history-table thead th {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.history-table tbody tr:nth-child(even) {
+  background: #fafbfa;
+}
+
+.history-table tbody tr:hover {
+  background: var(--light-green);
+}
+
+/* ホール別ノート */
+.hole-card {
+  margin-bottom: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.hole-card h3 {
+  font-size: 15px;
+  margin: 0;
+  padding: 10px 16px;
+  background: var(--primary-color);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hole-card h3 .hole-info {
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.hole-layout {
+  display: flex;
+  gap: 0;
+}
+
+.hole-layout .hole-img-wrap {
+  width: 120px;
+  min-width: 120px;
+  background: #1a3a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.hole-layout .hole-img-wrap img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain;
+}
+
+.hole-layout .hole-data {
+  flex: 1;
+  min-width: 0;
+}
+
+.hole-history {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.hole-history th,
+.hole-history td {
+  border: 1px solid var(--border-color);
+  border-left: none;
+  border-right: none;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.hole-history th:first-child,
+.hole-history td:first-child {
+  text-align: left;
+}
+
+.hole-history th:last-child,
+.hole-history td:last-child {
+  text-align: left;
+}
+
+.hole-history thead th {
+  background: #f8faf8;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.hole-history tbody tr:hover {
+  background: var(--light-green);
+}
+
+.hole-avg {
+  padding: 8px 16px;
+  background: #f8faf8;
+  font-size: 12px;
+  color: #888;
+  border-top: 1px solid var(--border-color);
+}
+
+.no-data {
+  padding: 16px;
+  text-align: center;
+  color: #bbb;
+  font-size: 13px;
+}
+
+/* hole-img / hole-content は hole-layout に統合済み */
+
+/* スコア色分け */
+.eagle { background-color: #f0e6ff !important; color: #7b1fa2; font-weight: 700; }
+.birdie { background-color: var(--birdie-bg) !important; color: var(--birdie-color); font-weight: 700; }
+.par-score { color: var(--par-color); font-weight: 600; }
+.bogey { background-color: var(--bogey-bg) !important; color: var(--bogey-color); font-weight: 600; }
+.double-bogey { background-color: var(--double-bogey-bg) !important; color: var(--double-bogey-color); font-weight: 700; }
+.fw-good { color: var(--good-mark); font-weight: 700; }
+.fw-bad { color: var(--bad-mark); }
+.fw-na { color: #ccc; }
+
+/* 振り返り */
+.reflection-entry {
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #fafbfa;
+}
+
+.reflection-entry .date-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reflection-entry .date-header .score-badge {
+  display: inline-block;
+  background: var(--primary-color);
+  color: #fff;
+  padding: 1px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-left: 10px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  margin-right: 4px;
+}
+
+.tag-good { background: #e8f5e9; color: #2e7d32; }
+.tag-issue { background: #fff3e0; color: #e65100; }
+.tag-next { background: #e3f2fd; color: #1565c0; }
+.tag-note { background: #f3e5f5; color: #7b1fa2; }
+
+.reflection-text {
+  font-size: 13px;
+  line-height: 1.8;
+  margin: 4px 0 10px 0;
+}
+
+.footer-note {
+  margin-top: 50px;
+  font-size: 12px;
+  color: #bbb;
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+@media print {
+  body { background: none; padding: 0; }
+  .container { max-width: none; box-shadow: none; padding: 20px; }
+  .hole-card { break-inside: avoid; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 25px 16px; }
+  header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .course-detail { grid-template-columns: repeat(2, 1fr); }
+  .summary-cards { grid-template-columns: repeat(2, 1fr); }
+  .scorecard-table { font-size: 10px; }
+  .hole-layout { flex-direction: column; }
+  .hole-layout .hole-img-wrap { width: 100%; min-width: 0; max-height: 200px; }
+  .hole-history { font-size: 11px; }
+  .hole-history th, .hole-history td { padding: 6px 6px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヘッダー -->
+  <header>
+    <h1>伊豆ハイツゴルフ倶楽部</h1>
+    <div class="meta">ゴルフノート</div>
+  </header>
+
+  <!-- コース概要 -->
+  <h2>コース概要</h2>
+  <div class="course-detail">
+    <div class="item"><span class="label">所在地</span><span class="value">静岡県伊豆市</span></div>
+    <div class="item"><span class="label">ホール / パー</span><span class="value">18H / Par 72</span></div>
+    <div class="item"><span class="label">コースレート</span><span class="value">72.8</span></div>
+    <div class="item"><span class="label">距離（BT）</span><span class="value">6,782y</span></div>
+    <div class="item"><span class="label">距離（RT）</span><span class="value">6,389y</span></div>
+    <div class="item"><span class="label">設計</span><span class="value">加藤俊輔</span></div>
+    <div class="item"><span class="label">開場</span><span class="value">1986年</span></div>
+    <div class="item"><span class="label">グリーン</span><span class="value">ワングリーン</span></div>
+  </div>
+
+  <div class="course-desc">
+    米国誌「ゴルフダイジェスト」1991年世界の名コース・日本のベスト20選出。OUTはスコットランド風リンクスコース（富士・箱根・伊豆の海の眺望）。INは原生樹林でセパレートされたテクニカルなレイアウト。伊豆随一のフラットなコース。
+  </div>
+
+  <div class="course-links">
+    <a href="http://www.izuheightsgolfclub.com/" target="_blank">公式サイト</a>
+    <a href="https://booking.gora.golf.rakuten.co.jp/guide/disp/c_id/220010/" target="_blank">楽天GORA</a>
+    <a href="https://reserve.golfdigest.co.jp/golf-course/440203/" target="_blank">GDO</a>
+  </div>
+
+  <!-- コースレイアウト（スコアカード） -->
+  <h2>コースレイアウト</h2>
+
+  <!-- OUT -->
+  <table class="scorecard-table">
+    <thead>
+      <tr>
+        <th style="width:60px">OUT</th>
+        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+        <th style="width:50px">計</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="par-row">
+        <td class="row-label">Par</td>
+        <td>5</td><td>4</td><td>4</td><td>3</td><td>5</td><td>4</td><td>4</td><td>3</td><td>4</td>
+        <td class="total-col">36</td>
+      </tr>
+      <tr>
+        <td class="row-label">BT (y)</td>
+        <td>563</td><td>313</td><td>369</td><td>153</td><td>523</td><td>390</td><td>312</td><td>194</td><td>415</td>
+        <td class="total-col">3,232</td>
+      </tr>
+      <tr>
+        <td class="row-label">RT (y)</td>
+        <td>536</td><td>301</td><td>354</td><td>152</td><td>504</td><td>369</td><td>291</td><td>179</td><td>394</td>
+        <td class="total-col">3,080</td>
+      </tr>
+      <tr>
+        <td class="row-label">LT (y)</td>
+        <td>433</td><td>264</td><td>286</td><td>121</td><td>420</td><td>325</td><td>238</td><td>125</td><td>340</td>
+        <td class="total-col">2,552</td>
+      </tr>
+      <tr class="hdcp-row">
+        <td class="row-label">HDCP</td>
+        <td>15</td><td>3</td><td>9</td><td>13</td><td>7</td><td>1</td><td>5</td><td>11</td><td>17</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- IN -->
+  <table class="scorecard-table">
+    <thead>
+      <tr>
+        <th style="width:60px">IN</th>
+        <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th>
+        <th style="width:50px">計</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="par-row">
+        <td class="row-label">Par</td>
+        <td>4</td><td>4</td><td>3</td><td>5</td><td>4</td><td>5</td><td>3</td><td>4</td><td>4</td>
+        <td class="total-col">36</td>
+      </tr>
+      <tr>
+        <td class="row-label">BT (y)</td>
+        <td>427</td><td>430</td><td>197</td><td>598</td><td>357</td><td>537</td><td>177</td><td>370</td><td>457</td>
+        <td class="total-col">3,550</td>
+      </tr>
+      <tr>
+        <td class="row-label">RT (y)</td>
+        <td>356</td><td>410</td><td>179</td><td>553</td><td>340</td><td>516</td><td>158</td><td>361</td><td>436</td>
+        <td class="total-col">3,309</td>
+      </tr>
+      <tr>
+        <td class="row-label">LT (y)</td>
+        <td>287</td><td>326</td><td>119</td><td>479</td><td>309</td><td>456</td><td>123</td><td>300</td><td>303</td>
+        <td class="total-col">2,702</td>
+      </tr>
+      <tr class="hdcp-row">
+        <td class="row-label">HDCP</td>
+        <td>10</td><td>4</td><td>16</td><td>2</td><td>8</td><td>14</td><td>18</td><td>6</td><td>12</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ラウンド履歴 -->
+  <h2>ラウンド履歴</h2>
+  <div class="no-data">まだラウンド記録がありません。「ゴルフノート作って」でラウンドを記録しましょう。</div>
+
+  <!-- ホール別ノート -->
+  <h2>ホール別ノート</h2>
+
+  <!-- Hole 1 -->
+  <div class="hole-card">
+    <h3>Hole 1 <span class="hole-info">Par 5 / BT 563y / RT 536y / HDCP 15</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_1.jpg" alt="Hole 1"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 2 -->
+  <div class="hole-card">
+    <h3>Hole 2 <span class="hole-info">Par 4 / BT 313y / RT 301y / HDCP 3</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_2.jpg" alt="Hole 2"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 3 -->
+  <div class="hole-card">
+    <h3>Hole 3 <span class="hole-info">Par 4 / BT 369y / RT 354y / HDCP 9</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_3.jpg" alt="Hole 3"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 4 -->
+  <div class="hole-card">
+    <h3>Hole 4 <span class="hole-info">Par 3 / BT 153y / RT 152y / HDCP 13</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_4.jpg" alt="Hole 4"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 5 -->
+  <div class="hole-card">
+    <h3>Hole 5 <span class="hole-info">Par 5 / BT 523y / RT 504y / HDCP 7</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_5.jpg" alt="Hole 5"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 6 -->
+  <div class="hole-card">
+    <h3>Hole 6 <span class="hole-info">Par 4 / BT 390y / RT 369y / HDCP 1</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_6.jpg" alt="Hole 6"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 7 -->
+  <div class="hole-card">
+    <h3>Hole 7 <span class="hole-info">Par 4 / BT 312y / RT 291y / HDCP 5</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_7.jpg" alt="Hole 7"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 8 -->
+  <div class="hole-card">
+    <h3>Hole 8 <span class="hole-info">Par 3 / BT 194y / RT 179y / HDCP 11</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_8.jpg" alt="Hole 8"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 9 -->
+  <div class="hole-card">
+    <h3>Hole 9 <span class="hole-info">Par 4 / BT 415y / RT 394y / HDCP 17</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_9.jpg" alt="Hole 9"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 10 -->
+  <div class="hole-card">
+    <h3>Hole 10 <span class="hole-info">Par 4 / BT 427y / RT 356y / HDCP 10</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_10.jpg" alt="Hole 10"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 11 -->
+  <div class="hole-card">
+    <h3>Hole 11 <span class="hole-info">Par 4 / BT 430y / RT 410y / HDCP 4</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_11.jpg" alt="Hole 11"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 12 -->
+  <div class="hole-card">
+    <h3>Hole 12 <span class="hole-info">Par 3 / BT 197y / RT 179y / HDCP 16</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_12.jpg" alt="Hole 12"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 13 -->
+  <div class="hole-card">
+    <h3>Hole 13 <span class="hole-info">Par 5 / BT 598y / RT 553y / HDCP 2</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_13.jpg" alt="Hole 13"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 14 -->
+  <div class="hole-card">
+    <h3>Hole 14 <span class="hole-info">Par 4 / BT 357y / RT 340y / HDCP 8</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_14.jpg" alt="Hole 14"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 15 -->
+  <div class="hole-card">
+    <h3>Hole 15 <span class="hole-info">Par 5 / BT 537y / RT 516y / HDCP 14</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_15.jpg" alt="Hole 15"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 16 -->
+  <div class="hole-card">
+    <h3>Hole 16 <span class="hole-info">Par 3 / BT 177y / RT 158y / HDCP 18</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_16.jpg" alt="Hole 16"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 17 -->
+  <div class="hole-card">
+    <h3>Hole 17 <span class="hole-info">Par 4 / BT 370y / RT 361y / HDCP 6</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_17.jpg" alt="Hole 17"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- Hole 18 -->
+  <div class="hole-card">
+    <h3>Hole 18 <span class="hole-info">Par 4 / BT 457y / RT 436y / HDCP 12</span></h3>
+    <div class="hole-layout">
+      <div class="hole-img-wrap"><img src="images/hole_18.jpg" alt="Hole 18"></div>
+      <div class="hole-data"><div class="no-data">ラウンド記録なし</div></div>
+    </div>
+  </div>
+
+  <!-- 振り返り履歴 -->
+  <h2>振り返り履歴</h2>
+  <div class="no-data">まだ振り返り記録がありません。</div>
+
+  <!-- フッター -->
+  <div class="footer-note">
+    Golf Note - 伊豆ハイツゴルフ倶楽部
+  </div>
+
+</div>
+</body>
+</html>
